@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=KRunner Plasmoid
 Comment=KRunner in a plasmoid.
-Icon=start-here-kde
+Icon=search
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet
 
