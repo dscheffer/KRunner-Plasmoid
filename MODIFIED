@@ -1,0 +1,2 @@
+Gtest / Gmock:
+# Removed lines 1615-1619 of method AddNewExpectation in file gtest-1.8.0/googlemock/include/gmock/gmock-spec-builders.h as workaround for unexpected segmentation faults when adding gmock expectation.

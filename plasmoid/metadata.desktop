@@ -1,0 +1,19 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KRunner Plasmoid
+Comment=KRunner in a plasmoid.
+Icon=start-here-kde
+Type=Service
+X-KDE-ServiceTypes=Plasma/Applet
+
+X-KDE-ParentApp=
+X-KDE-PluginInfo-Author=dscheffer
+X-KDE-PluginInfo-Email=dennis.scheffer1993@gmail.com
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=dscheffer.krunnerplasmoid
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=https://github.com/dscheffer/
+X-KDE-ServiceTypes=Plasma/Applet
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
+X-KDE-PluginInfo-Category=Windows and Tasks
