@@ -38,8 +38,9 @@ Item {
     Layout.minimumHeight: currentHeight
     Layout.maximumHeight: currentHeight
 
-    KRunner { 
+    RunCommand { 
         id: krunner
+        closable: false
     }
 
     function addToHistory(entry) {
