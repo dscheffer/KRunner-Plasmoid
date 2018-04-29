@@ -119,6 +119,7 @@ ColumnLayout {
                 }
             }
             Keys.onEnterPressed: results.runCurrentIndex(event)
+
             Keys.onReturnPressed: results.runCurrentIndex(event)
 
             Keys.onEscapePressed: {
@@ -185,6 +186,8 @@ ColumnLayout {
             onActivated: {
                 runnerWindow.addToHistory(queryString)
                 runnerWindow.visible = false
+                root.query = "";
+                queryField.forceActiveFocus();
             }
 
             onUpdateQueryString: {
