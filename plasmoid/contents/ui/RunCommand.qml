@@ -200,7 +200,9 @@ ColumnLayout {
         visible: root.query.length === 0 && listView.count > 0
         // don't accept keyboard input when not visible so the keys propagate to the other list
         enabled: visible
-        Layout.preferredHeight: Math.min(Screen.height, listView.contentHeight)
+        Layout.preferredHeight: Math.min(Screen.height, listView.contentHeight + 5)
+
+        anchors.top: searchRow.bottom
 
         ListView {
             id: listView // needs this id so the delegate can access it
@@ -208,6 +210,9 @@ ColumnLayout {
             highlight: PlasmaComponents.Highlight {}
             highlightMoveDuration: 0
             activeFocusOnTab: true
+
+            anchors.topMargin: 5
+
             // we store 50 entries in the history but only show 20 in the UI so it doesn't get too huge
             model: root.showHistory ? runnerWindow.history.slice(0, 20) : []
             delegate: Milou.ResultDelegate {
