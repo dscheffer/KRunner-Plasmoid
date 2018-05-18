@@ -11,13 +11,17 @@ Ubuntu 16.04 with
 - KDE Frameworks 5.45.0
 - Qt 5.10.0
 
-## Build Requirements
+## Requirements
+Build:
 - libkf5config-dev >= 5.45.0
 - libkf5globalaccel-dev >= 5.45.0
 - libkf5i18n-dev >= 5.45.0
 - libkf5package-dev >= 5.45.0
 - libkf5plasma-dev >= 5.45.0
 - Qt >= 5.10
+
+Runtime:
+- milou >= 5.12.5
 
 ## Build & Install
 Run these instructions to build and install the plasmoid.
