@@ -31,7 +31,7 @@ Item {
     property real currentHeight: units.gridUnit * 31
     property var history: []
 
-    Layout.minimumWidth: units.gridUnit * 30
+    Layout.minimumWidth: units.gridUnit * 28
     Layout.minimumHeight: currentHeight
     Layout.maximumHeight: currentHeight
 
