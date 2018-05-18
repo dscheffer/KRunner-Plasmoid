@@ -22,8 +22,8 @@ import org.kde.plasma.plasmoid 2.0
 
 Item {
     id: application
-    width: childrenRect.width
-    height: childrenRect.height
+    width: childrenRect.implicitWidth
+    height: childrenRect.implicitHeight
 
     Plasmoid.switchHeight: 555
     Plasmoid.compactRepresentation: MainMenu { }

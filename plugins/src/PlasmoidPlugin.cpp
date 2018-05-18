@@ -23,9 +23,6 @@
 #include "config.hpp"
 #include "ShortcutHandler.hpp"
 
-#include <KPackage/Package>
-#include <KPackage/PackageLoader>
-
 #include <KConfigGroup>
 #include <KSharedConfig>
 
@@ -33,15 +30,6 @@
 
 void PlasmoidPlugin::registerTypes(const char *uri)
 {
-    KPackage::Package package = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/LookAndFeel"));
-    KConfigGroup cg(KSharedConfig::openConfig(QStringLiteral("kdeglobals")), "KDE");
-    const QString packageName = cg.readEntry("LookAndFeelPackage", QString());
-    if (!packageName.isEmpty()) {
-        package.setPath(packageName);
-    }
-
-    qmlRegisterType(package.fileUrl("runcommandmainscript"), uri, MAJOR_VERSION, MINOR_VERSION, "KRunner");
-
     qmlRegisterSingletonType<ApplicationLauncher>(uri, MAJOR_VERSION, MINOR_VERSION, "ApplicationLauncher", [](QQmlEngine * engine, QJSEngine * scriptEngine) -> QObject * {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)

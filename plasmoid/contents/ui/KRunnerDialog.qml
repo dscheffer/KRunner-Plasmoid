@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.7
+import QtQuick.Layouts 1.1
 import org.kde.plasma.components 2.0 as PlasmaComponents                                                                    
 import org.kde.plasma.core 2.0 as PlasmaCore
 
@@ -37,7 +38,10 @@ PlasmaCore.Dialog {
     mainItem: Item {
         width: childrenRect.width
         height: childrenRect.height
-        KRunner { id: krunner }
+        RunCommand { 
+            id: krunner
+            width: units.gridUnit * 30
+        }
     }
 
     function addToHistory(entry) {

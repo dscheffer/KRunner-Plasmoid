@@ -14,7 +14,6 @@ set(plasmoidplugin_DEPS
 find_package(KF5Config)
 find_package(KF5GlobalAccel)
 find_package(KF5I18n)
-find_package(KF5Package)
 
 add_library(plasmoidplugin SHARED ${plasmoidplugin_SRCS})
 

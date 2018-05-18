@@ -28,19 +28,19 @@ import dscheffer.krunnerplasmoidplugin 0.1
 Item {
     id: runnerWindow
     visible: true
-    property real currentHeight: 555
-    property bool canConfigure: true
+    property real currentHeight: units.gridUnit * 31
     property var history: []
 
-    anchors.topMargin: 5
-    
-    Layout.minimumWidth: krunner.width
+    Layout.minimumWidth: units.gridUnit * 30
     Layout.minimumHeight: currentHeight
     Layout.maximumHeight: currentHeight
 
     RunCommand { 
         id: krunner
-        closable: false
+        showHistory: true
+        toggleHistory: false  
+
+        anchors.fill: parent
     }
 
     function addToHistory(entry) {
@@ -60,6 +60,7 @@ Item {
     onVisibleChanged: {
         if (runnerWindow.visible == false) {
             runnerWindow.visible = true;
+            krunner.showHistory = true;
         }
     }
 

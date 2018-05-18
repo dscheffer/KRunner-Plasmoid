@@ -31,11 +31,11 @@ ColumnLayout {
     property string query
     property string runner
     property bool showHistory: false
-    property bool closable: true
+    property bool toggleHistory: true
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
-
+    
     onQueryChanged: {
         queryField.text = query;
     }
@@ -55,23 +55,23 @@ ColumnLayout {
     }
 
     RowLayout {
+        id: searchRow
         Layout.alignment: Qt.AlignTop
-        PlasmaComponents.ToolButton {
-            iconSource: "configure"
-            onClicked: {
-                runnerWindow.visible = false
-                runnerWindow.displayConfiguration()
-            }
-            Accessible.name: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Configure")
-            Accessible.description: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Configure Search Plugins")
-            visible: runnerWindow.canConfigure
+
+        PlasmaComponents.Label {
+            text: "KRunner"
+            horizontalAlignment: Text.AlignRight
+
+            Layout.minimumWidth: units.gridUnit * 9
         }
         PlasmaComponents.TextField {
             id: queryField
             property bool allowCompletion: false
 
             clearButtonShown: true
-            Layout.minimumWidth: units.gridUnit * 25
+            //Layout.minimumWidth: units.gridUnit * 21
+            Layout.fillWidth: true
+            
 
             activeFocusOnPress: true
             placeholderText: results.runnerName ? i18ndc("plasma_lookandfeel_org.kde.lookandfeel",
@@ -140,7 +140,7 @@ ColumnLayout {
                     colorGroup: PlasmaCore.Theme.ButtonColorGroup
                 }
                 elementId: "down-arrow"
-                visible: queryField.length === 0
+                visible: toggleHistory ? queryField.length === 0 : false
 
                 MouseArea {
                     anchors.fill: parent
@@ -155,13 +155,6 @@ ColumnLayout {
                 }
             }
         }
-        PlasmaComponents.ToolButton {
-            iconSource: "window-close"
-            onClicked: runnerWindow.visible = false
-            Accessible.name: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Close")
-            Accessible.description: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Close Search")
-            visible: root.closable
-        }
     }
 
     PlasmaExtras.ScrollArea {
@@ -169,12 +162,16 @@ ColumnLayout {
         visible: results.count > 0
         enabled: visible
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.min(Screen.height, results.contentHeight)
+        Layout.preferredHeight: Math.min(Screen.height, results.contentHeight + 5)
+
+        anchors.top: searchRow.bottom
 
         Milou.ResultsView {
             id: results
             queryString: root.query
             runner: root.runner
+
+            anchors.topMargin: 5
 
             Keys.onPressed: {
                 if (event.text != "") {
