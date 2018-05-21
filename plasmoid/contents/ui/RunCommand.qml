@@ -100,18 +100,20 @@ ColumnLayout {
             }
             Keys.onPressed: allowCompletion = (event.key !== Qt.Key_Backspace && event.key !== Qt.Key_Delete)
             Keys.onUpPressed: {
-                if (length === 0) {
+                if (length === 0 && History.history.length > 0) {
                     root.showHistory = true;
                     listView.forceActiveFocus();
+                    listView.currentIndex = History.history.length - 1;
                 } else if (results.count > 0) {
                     results.forceActiveFocus();
                     results.decrementCurrentIndex();
                 }
             }
             Keys.onDownPressed: {
-                if (length === 0) {
+                if (length === 0 && History.history.length > 0) {
                     root.showHistory = true;
                     listView.forceActiveFocus();
+                    listView.currentIndex = 0;
                 } else if (results.count > 0) {
                     results.forceActiveFocus();
                     results.incrementCurrentIndex();
@@ -254,8 +256,23 @@ ColumnLayout {
                 }
             }
   
-            Keys.onUpPressed: decrementCurrentIndex()
-            Keys.onDownPressed: incrementCurrentIndex()
+            Keys.onUpPressed: {
+                if (currentIndex == 0) {
+                    queryField.forceActiveFocus();
+                    currentIndex = -1;
+                } else {
+                    decrementCurrentIndex();
+                }
+            }
+
+            Keys.onDownPressed: {
+                if (currentIndex == History.history.length-1) {
+                    queryField.forceActiveFocus();
+                    currentIndex = -1;
+                } else {
+                    incrementCurrentIndex()
+                }
+            }
 
             function runCurrentIndex() {
                 var entry = History.history[currentIndex]
