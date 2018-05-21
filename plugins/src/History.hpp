@@ -26,7 +26,7 @@
 class History : public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList history READ getHistory);
+    Q_PROPERTY(QStringList history READ getHistory NOTIFY historyChanged);
 
     QStringList history;
 
@@ -38,6 +38,9 @@ public:
 
     Q_INVOKABLE void addToHistory(QString entry);
     Q_INVOKABLE void removeFromHistory(QString entry);
+
+signals:
+    void historyChanged(bool checked = 0);
 };
 
 
