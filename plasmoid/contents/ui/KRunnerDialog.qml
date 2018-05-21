@@ -31,8 +31,7 @@ PlasmaCore.Dialog {
     hideOnWindowDeactivate: hide
     visible: false
     property bool canConfigure: true
-    property var history: []
-    
+
     location: PlasmaCore.Types.Floating
     
     mainItem: Item {

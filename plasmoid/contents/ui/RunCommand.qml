@@ -26,6 +26,8 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.milou 0.1 as Milou
 
+import dscheffer.krunnerplasmoidplugin 0.1
+
 ColumnLayout {
     id: root
     property string query
@@ -83,7 +85,7 @@ ColumnLayout {
             onTextChanged: {
                 root.query = queryField.text
                 if (allowCompletion && length > 0) {
-                    var history = runnerWindow.history
+                    var history = History.history
 
                     // search the first item in the history rather than the shortest matching one
                     // this way more recently used entries take precedence over older ones (Bug 358985)
@@ -181,7 +183,7 @@ ColumnLayout {
             }
 
             onActivated: {
-                runnerWindow.addToHistory(queryString)
+                History.addToHistory(queryString)
                 runnerWindow.visible = false
                 root.query = "";
                 queryField.forceActiveFocus();
@@ -213,16 +215,16 @@ ColumnLayout {
 
             anchors.topMargin: 5
 
-            // we store 50 entries in the history but only show 20 in the UI so it doesn't get too huge
-            model: root.showHistory ? runnerWindow.history.slice(0, 20) : []
+            model: root.showHistory ? History.history : []
             delegate: Milou.ResultDelegate {
                 id: resultDelegate
                 width: listView.width
                 typeText: index === 0 ? i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Recent Queries") : ""
-                additionalActions: [{
+                /*additionalActions: [{
                     icon: "list-remove",
-                    text: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Remove")
-                }]
+                    text: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Remove"),
+                    onTriggered: History.removeFromHistory(index)
+                }]*/
                 Accessible.description: i18n("in category recent queries")
             }
 
@@ -259,7 +261,7 @@ ColumnLayout {
             Keys.onDownPressed: incrementCurrentIndex()
 
             function runCurrentIndex() {
-                var entry = runnerWindow.history[currentIndex]
+                var entry = History.history[currentIndex]
                 if (entry) {
                     queryField.text = entry
                     queryField.forceActiveFocus();
@@ -270,7 +272,7 @@ ColumnLayout {
                 if (actionIndex === 0) {
                     // QStringList changes just reset the model, so we'll remember the index and set it again
                     var currentIndex = listView.currentIndex
-                    runnerWindow.removeFromHistory(currentIndex)
+                    History.removeFromHistory(currentIndex)
                     listView.currentIndex = currentIndex
                 }
             }
