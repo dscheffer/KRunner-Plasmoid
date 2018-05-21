@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QQmlListProperty>
 
-class History : QObject {
+class History : public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QStringList history READ getHistory);
