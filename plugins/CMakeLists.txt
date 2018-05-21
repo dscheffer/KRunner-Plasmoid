@@ -5,6 +5,7 @@ set(plasmoidplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ApplicationLauncher.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/QProcessWrapperImpl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ShortcutHandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/History.cpp
 )
 
 set(plasmoidplugin_DEPS
@@ -30,4 +31,8 @@ set(test_MAIN ${CMAKE_CURRENT_SOURCE_DIR}/tests/main.cpp ${CMAKE_CURRENT_SOURCE_
 add_executable(applicationLauncherTest ${test_MAIN} ${CMAKE_CURRENT_SOURCE_DIR}/tests/ApplicationLauncherTest.cpp ${plasmoidplugin_SRCS})
 target_link_libraries(applicationLauncherTest gmock ${Qt5Widgets_LIBRARIES} ${plasmoidplugin_DEPS} -lpthread -lm)
 
+add_executable(historyTest ${test_MAIN} ${CMAKE_CURRENT_SOURCE_DIR}/tests/HistoryTest.cpp ${plasmoidplugin_SRCS})
+target_link_libraries(historyTest gmock ${Qt5Widgets_LIBRARIES} ${plasmoidplugin_DEPS} -lpthread -lm)
+
 add_test(ApplicationLauncherTest applicationLauncherTest)
+add_test(HistoryTest historyTest)

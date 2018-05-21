@@ -22,6 +22,7 @@
 #include "ApplicationLauncher.hpp"
 #include "config.hpp"
 #include "ShortcutHandler.hpp"
+#include "History.hpp"
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -44,5 +45,13 @@ void PlasmoidPlugin::registerTypes(const char *uri)
 
         ShortcutHandler *handler = new ShortcutHandler();
         return handler;
+    });
+
+    qmlRegisterSingletonType<ShortcutHandler>(uri, MAJOR_VERSION, MINOR_VERSION, "History", [](QQmlEngine * engine, QJSEngine * scriptEngine) -> QObject * {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+
+        History *history = new History();
+        return history;
     });
 }
