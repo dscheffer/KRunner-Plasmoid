@@ -20,7 +20,7 @@
 #include "History.hpp"
 
 History::History(QObject *parent)
-    : history()
+    : QObject(parent),  history()
 { }
 
 History::~History()
