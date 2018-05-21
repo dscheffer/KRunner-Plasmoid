@@ -281,6 +281,13 @@ ColumnLayout {
                     queryField.forceActiveFocus();
                 }
             }
+
+            // This is used to disable mouse selection if the user interacts only with keyboard
+            property bool moved: false
+            property point savedMousePosition: Milou.MouseHelper.globalMousePosition()
+            function mouseMovedGlobally() {
+                return savedMousePosition != Milou.MouseHelper.globalMousePosition();
+            }
         }
 
     }
