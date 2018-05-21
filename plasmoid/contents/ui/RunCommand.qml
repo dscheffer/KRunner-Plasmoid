@@ -35,6 +35,8 @@ ColumnLayout {
     property bool showHistory: false
     property bool toggleHistory: true
 
+    signal closed()
+
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
     
@@ -42,18 +44,13 @@ ColumnLayout {
         queryField.text = query;
     }
 
-    Connections {
-        target: runnerWindow
-        onVisibleChanged: {
-            if (runnerWindow.visible) {
-                queryField.forceActiveFocus();
-                listView.currentIndex = -1
-            } else {
-                root.query = "";
-                root.runner = ""
-                root.showHistory = false
-            }
-        }
+    function activateFocus() {
+        queryField.forceActiveFocus();
+    }
+
+    function activateListViewFocus() {
+        listView.forceActiveFocus();
+        listView.currentIndex = -1
     }
 
     RowLayout {
@@ -124,9 +121,7 @@ ColumnLayout {
 
             Keys.onReturnPressed: results.runCurrentIndex(event)
 
-            Keys.onEscapePressed: {
-                runnerWindow.visible = false
-            }
+            Keys.onEscapePressed: root.closed()
 
             PlasmaCore.SvgItem {
                 anchors {
@@ -148,6 +143,8 @@ ColumnLayout {
                     anchors.fill: parent
                     onPressed: {
                         root.showHistory = !root.showHistory
+                        console.log(History.history[0]);
+                        console.log(root.query.length === 0 && History.history.length > 0);
                         if (root.showHistory) {
                             listView.forceActiveFocus(); // is the history list
                         } else {
@@ -183,8 +180,8 @@ ColumnLayout {
             }
 
             onActivated: {
-                History.addToHistory(queryString)
-                runnerWindow.visible = false
+                History.addToHistory(queryString);
+                root.closed();
                 root.query = "";
                 queryField.forceActiveFocus();
             }
@@ -199,7 +196,7 @@ ColumnLayout {
     PlasmaExtras.ScrollArea {
         Layout.alignment: Qt.AlignTop
         Layout.fillWidth: true
-        visible: root.query.length === 0 && listView.count > 0
+        visible: root.query.length === 0 && History.history.length > 0
         // don't accept keyboard input when not visible so the keys propagate to the other list
         enabled: visible
         Layout.preferredHeight: Math.min(Screen.height, listView.contentHeight + 5)
@@ -265,15 +262,6 @@ ColumnLayout {
                 if (entry) {
                     queryField.text = entry
                     queryField.forceActiveFocus();
-                }
-            }
-
-            function runAction(actionIndex) {
-                if (actionIndex === 0) {
-                    // QStringList changes just reset the model, so we'll remember the index and set it again
-                    var currentIndex = listView.currentIndex
-                    History.removeFromHistory(currentIndex)
-                    listView.currentIndex = currentIndex
                 }
             }
         }

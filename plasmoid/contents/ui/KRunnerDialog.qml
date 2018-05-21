@@ -40,16 +40,20 @@ PlasmaCore.Dialog {
         RunCommand { 
             id: krunner
             width: units.gridUnit * 28
+
+            onClosed: {
+                runnerWindow.visible = false
+                krunner.query = "";
+                krunner.runner = "";
+                krunner.showHistory = false;
+            }
         }
     }
 
-    function addToHistory(entry) {
-        runnerWindow.history.push(entry);
-    }
-
-    function removeFromHistory(index) {
-        if (index > -1) {
-            runnerWindow.history.splice(index, 1);
+    onVisibleChanged: {
+        if (runnerWindow.visible) {
+            krunner.activateFocus();
+            //listView.currentIndex = -1
         }
     }
 

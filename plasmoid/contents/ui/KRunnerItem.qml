@@ -27,7 +27,6 @@ import dscheffer.krunnerplasmoidplugin 0.1
 
 Item {
     id: runnerWindow
-    visible: true
     property real currentHeight: units.gridUnit * 31
 
     Layout.minimumWidth: units.gridUnit * 28
@@ -37,43 +36,20 @@ Item {
     RunCommand { 
         id: krunner
         showHistory: true
-        toggleHistory: false  
+        toggleHistory: false
 
         anchors.fill: parent
-    }
 
-    function addToHistory(entry) {
-        runnerWindow.history.push(entry);
-    }
-
-    function removeFromHistory(index) {
-        if (index > -1) {
-            runnerWindow.history.splice(index, 1);
+        onClosed: {
+            krunner.query = "";
+            krunner.runner = "";
+            krunner.showHistory = false; // toggle show history so milou result delegate updates model??
+            krunner.showHistory = true;
+            krunner.activateListViewFocus();
         }
     }
 
     function displayConfiguration() {
         ApplicationLauncher.launchPlasmasearchSettings();
     }
-
-    onVisibleChanged: {
-        if (runnerWindow.visible == false) {
-            runnerWindow.visible = true;
-            krunner.showHistory = true;
-        }
-    }
-
-    /*MouseArea {
-        id: resize
-        cursorShape: Qt.SizeVerCursor
-        anchors.bottom: runnerWindow.bottom
-        anchors.left: runnerWindow.left
-        anchors.right: runnerWindow.right
-        height: 2
-
-        onPositionChanged: function(event) {
-            var point = resize.mapToItem(runnerWindow, event.x, event.y);
-            runnerWindow.currentHeight = point.y;
-        }
-    }*/
 }
