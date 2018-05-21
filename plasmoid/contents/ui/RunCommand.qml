@@ -180,7 +180,7 @@ ColumnLayout {
             }
 
             onActivated: {
-                History.addToHistory(queryString);
+                History.addToHistory(results.currentItem.theModel.display);
                 root.closed();
                 root.query = "";
                 queryField.forceActiveFocus();
@@ -216,7 +216,7 @@ ColumnLayout {
             delegate: Milou.ResultDelegate {
                 id: resultDelegate
                 width: listView.width
-                typeText: index === 0 ? i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Recent Queries") : ""
+                typeText: index === 0 ? i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Recent Results") : ""
                 /*additionalActions: [{
                     icon: "list-remove",
                     text: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Remove"),
