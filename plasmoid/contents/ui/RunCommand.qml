@@ -145,9 +145,8 @@ ColumnLayout {
                     anchors.fill: parent
                     onPressed: {
                         root.showHistory = !root.showHistory
-                        console.log(History.history[0]);
-                        console.log(root.query.length === 0 && History.history.length > 0);
                         if (root.showHistory) {
+                            History.loadHistory();
                             listView.forceActiveFocus(); // is the history list
                         } else {
                             queryField.forceActiveFocus();

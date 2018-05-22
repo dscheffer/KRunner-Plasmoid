@@ -41,6 +41,7 @@ public:
     Q_INVOKABLE void addToHistory(QString entry);
     Q_INVOKABLE void removeFromHistory(QString entry);
 
+    Q_INVOKABLE void loadHistory();
 signals:
     void historyChanged(bool checked = 0);
 

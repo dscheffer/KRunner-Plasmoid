@@ -26,20 +26,7 @@
 History::History(QObject *parent)
     : QObject(parent),  history()
 {
-    QFile file(CONFIG_LOCATION);
-
-    if (!file.open(QIODevice::ReadWrite)) {
-        return;
-    }
-
-    QDataStream in(&file);
-    while (!in.atEnd()) {
-        QString entry;
-        in >> entry;
-        history.push_back(entry);
-    }
-
-    file.close();
+    loadHistory();
 }
 
 History::~History()
@@ -87,4 +74,22 @@ void History::writeHistoryToFile() {
 
 void History::setPersistent(bool persistent) {
     this->persistent = persistent;
+}
+
+void History::loadHistory() {
+    QFile file(CONFIG_LOCATION);
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        return;
+    }
+
+    history.clear();
+    QDataStream in(&file);
+    while (!in.atEnd()) {
+        QString entry;
+        in >> entry;
+        history.push_back(entry);
+    }
+
+    file.close();
 }
