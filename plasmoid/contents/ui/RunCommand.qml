@@ -36,6 +36,7 @@ ColumnLayout {
     property bool toggleHistory: true
 
     signal closed()
+    signal queryFieldFocused()
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
@@ -47,6 +48,7 @@ ColumnLayout {
     function activateFocus() {
         queryField.forceActiveFocus();
         listView.currentIndex = -1;
+        queryFieldFocused();
     }
 
     function activateListViewFocus() {
@@ -150,7 +152,7 @@ ColumnLayout {
                             History.loadHistory();
                             listView.forceActiveFocus(); // is the history list
                         } else {
-                            queryField.forceActiveFocus();
+                            root.activateFocus();
                         }
                     }
                 }
@@ -185,7 +187,7 @@ ColumnLayout {
                 History.addToHistory(results.currentItem.theModel.display);
                 root.closed();
                 root.query = "";
-                queryField.forceActiveFocus();
+                root.activateFocus();
             }
 
             onUpdateQueryString: {
@@ -258,8 +260,7 @@ ColumnLayout {
   
             Keys.onUpPressed: {
                 if (currentIndex == 0) {
-                    queryField.forceActiveFocus();
-                    currentIndex = -1;
+                    root.activateFocus();
                 } else {
                     decrementCurrentIndex();
                 }
@@ -267,8 +268,7 @@ ColumnLayout {
 
             Keys.onDownPressed: {
                 if (currentIndex == History.history.length-1) {
-                    queryField.forceActiveFocus();
-                    currentIndex = -1;
+                    root.activateFocus();
                 } else {
                     incrementCurrentIndex()
                 }
@@ -278,7 +278,7 @@ ColumnLayout {
                 var entry = History.history[currentIndex]
                 if (entry) {
                     queryField.text = entry
-                    queryField.forceActiveFocus();
+                    root.activateFocus();
                 }
             }
 

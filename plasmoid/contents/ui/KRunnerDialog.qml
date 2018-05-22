@@ -47,6 +47,10 @@ PlasmaCore.Dialog {
                 krunner.runner = "";
                 krunner.showHistory = false;
             }
+
+            onQueryFieldFocused: {
+                krunner.showHistory = false;
+            }
         }
     }
 
@@ -54,8 +58,6 @@ PlasmaCore.Dialog {
         if (runnerWindow.visible) {
             krunner.showHistory = false;
             krunner.activateFocus();
-            //listView.currentIndex = -1
-
         }
     }
 
