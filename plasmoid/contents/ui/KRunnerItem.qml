@@ -40,6 +40,10 @@ Item {
 
         anchors.fill: parent
 
+        Component.onCompleted: {
+            krunner.activateFocus();
+        }
+
         onClosed: {
             krunner.query = "";
             krunner.runner = "";

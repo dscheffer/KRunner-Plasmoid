@@ -46,6 +46,7 @@ ColumnLayout {
 
     function activateFocus() {
         queryField.forceActiveFocus();
+        listView.currentIndex = -1;
     }
 
     function activateListViewFocus() {
