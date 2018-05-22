@@ -51,6 +51,8 @@ Item {
             krunner.showHistory = true;
             krunner.activateListViewFocus();
         }
+
+        onQueryFieldFocused: History.loadHistory()
     }
 
     function displayConfiguration() {
