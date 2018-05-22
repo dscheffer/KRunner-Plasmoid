@@ -17,11 +17,30 @@
  *   along with KRunner Plasmoid.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QFile>
+#include <QDataStream>
+#include <QtConcurrent>
+#include "config.hpp"
 #include "History.hpp"
 
 History::History(QObject *parent)
     : QObject(parent),  history()
-{ }
+{
+    QFile file(CONFIG_LOCATION);
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        return;
+    }
+
+    QDataStream in(&file);
+    while (!in.atEnd()) {
+        QString entry;
+        in >> entry;
+        history.push_back(entry);
+    }
+
+    file.close();
+}
 
 History::~History()
 { }
@@ -35,9 +54,37 @@ void History::addToHistory(QString entry)
 {
     history.removeAll(entry);
     history.push_front(entry);
+
+    if (persistent) {
+        QtConcurrent::run(this, &History::writeHistoryToFile);
+    }
 }
 
 void History::removeFromHistory(QString entry)
 {
     history.removeAll(entry);
+
+    if (persistent) {
+        QtConcurrent::run(this, &History::writeHistoryToFile);
+    }
+}
+
+void History::writeHistoryToFile() {
+    QFile file(CONFIG_LOCATION);
+    if (!file.open(QIODevice::ReadWrite)) {
+        return;
+    }
+
+    file.copy(QString(CONFIG_LOCATION) + QString(".backup"));
+
+    QDataStream out(&file);
+    for (QString entry : history) {
+        out << entry;
+    }
+
+    file.close();
+}
+
+void History::setPersistent(bool persistent) {
+    this->persistent = persistent;
 }

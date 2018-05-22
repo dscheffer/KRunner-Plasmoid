@@ -29,10 +29,12 @@ class History : public QObject {
     Q_PROPERTY(QStringList history READ getHistory NOTIFY historyChanged);
 
     QStringList history;
-
+    bool persistent = true;
 public:
     History(QObject* parent = 0);
     ~History();
+
+    void setPersistent(bool persistent);
 
     QStringList getHistory();
 
@@ -41,6 +43,9 @@ public:
 
 signals:
     void historyChanged(bool checked = 0);
+
+private:
+    void writeHistoryToFile();
 };
 
 

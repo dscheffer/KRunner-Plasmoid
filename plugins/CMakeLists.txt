@@ -9,10 +9,11 @@ set(plasmoidplugin_SRCS
 )
 
 set(plasmoidplugin_DEPS
-    Qt5::Quick KF5::Plasma KF5::ConfigCore KF5::GlobalAccel KF5::Package KF5::I18n
+    Qt5::Quick KF5::Plasma KF5::ConfigCore KF5::KIOCore KF5::GlobalAccel KF5::Package KF5::I18n
 )
 
 find_package(KF5Config)
+find_package(KF5KIO)
 find_package(KF5GlobalAccel)
 find_package(KF5I18n)
 

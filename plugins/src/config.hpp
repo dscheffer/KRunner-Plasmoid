@@ -20,7 +20,11 @@
 #ifndef __config_HPP_INCLUDED__  
 #define __config_HPP_INCLUDED__
 
+#include <QtCore/QDir>
+
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1
+
+#define CONFIG_LOCATION QDir::homePath() + "/.config/krunnerplasmoidrc"
 
 #endif //__config_HPP_INCLUDED__

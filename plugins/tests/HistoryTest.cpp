@@ -31,6 +31,7 @@ namespace
 
     TEST(HistoryTest, AddToHistoryTest) {
         History history;
+        history.setPersistent(false);
         history.addToHistory(QString("abcd"));
 
         QString result = history.getHistory()[0];
@@ -40,6 +41,7 @@ namespace
 
     TEST(HistoryTest, AddToHistoryTwice) {
         History history;
+        history.setPersistent(false);
         history.addToHistory(QString("abcd"));
         history.addToHistory(QString("efgh"));
         history.addToHistory(QString("efgh"));
@@ -51,6 +53,7 @@ namespace
 
     TEST(HistoryTest, RemoveFromHistory) {
         History history;
+        history.setPersistent(false);
         history.addToHistory(QString("abcd"));
         history.addToHistory(QString("efgh"));
         history.removeFromHistory(QString("abcd"));
@@ -62,6 +65,7 @@ namespace
 
     TEST(HistoryTest, RemoveFromEmpty) {
         History history;
+        history.setPersistent(false);
         history.removeFromHistory(QString("abcd"));
 
         int count = history.getHistory().length();
