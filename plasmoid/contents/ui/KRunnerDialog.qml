@@ -52,8 +52,10 @@ PlasmaCore.Dialog {
 
     onVisibleChanged: {
         if (runnerWindow.visible) {
+            krunner.showHistory = false;
             krunner.activateFocus();
             //listView.currentIndex = -1
+
         }
     }
 
