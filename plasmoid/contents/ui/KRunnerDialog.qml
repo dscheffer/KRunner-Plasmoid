@@ -42,7 +42,7 @@ PlasmaCore.Dialog {
             width: units.gridUnit * 28
 
             onClosed: {
-                runnerWindow.visible = false
+                runnerWindow.visible = false;
                 krunner.query = "";
                 krunner.runner = "";
                 krunner.showHistory = false;
