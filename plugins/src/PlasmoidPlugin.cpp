@@ -27,7 +27,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#include <QtQml>
+#include <QtQml/QtQml>
 
 void PlasmoidPlugin::registerTypes(const char *uri)
 {
@@ -54,4 +54,6 @@ void PlasmoidPlugin::registerTypes(const char *uri)
         History *history = new History();
         return history;
     });
+
+    qmlRegisterType<HistoryEntry>(uri, MAJOR_VERSION, MINOR_VERSION, "HistoryEntry");
 }

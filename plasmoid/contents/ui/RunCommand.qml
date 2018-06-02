@@ -90,7 +90,7 @@ ColumnLayout {
                     // search the first item in the history rather than the shortest matching one
                     // this way more recently used entries take precedence over older ones (Bug 358985)
                     for (var i = 0, j = history.length; i < j; ++i) {
-                        var item = history[i]
+                        var item = history[i].queryString
 
                         if (item.toLowerCase().indexOf(text.toLowerCase()) === 0) {
                             var oldText = text
@@ -184,7 +184,7 @@ ColumnLayout {
             }
 
             onActivated: {
-                History.addToHistory(results.currentItem.theModel.display);
+                History.addToHistory(results.queryString, results.currentItem.theModel.display, results.currentItem.theModel.decoration, results.currentIndex);
                 root.closed();
                 root.query = "";
                 root.activateFocus();
@@ -203,20 +203,21 @@ ColumnLayout {
         visible: root.query.length === 0 && History.history.length > 0
         // don't accept keyboard input when not visible so the keys propagate to the other list
         enabled: visible
-        Layout.preferredHeight: Math.min(Screen.height, listView.contentHeight + 5)
+        Layout.preferredHeight: root.showHistory ? Math.min(Screen.height, listView.contentHeight + 5) : 0
 
         anchors.top: searchRow.bottom
 
         ListView {
             id: listView // needs this id so the delegate can access it
+
             keyNavigationWraps: true
             highlight: PlasmaComponents.Highlight {}
             highlightMoveDuration: 0
             activeFocusOnTab: true
 
-            anchors.topMargin: 5
+            anchors.topMargin: root.showHistory ? 5 : 0
 
-            model: root.showHistory ? History.history : []
+            model: root.showHistory ? History : []
             delegate: Milou.ResultDelegate {
                 id: resultDelegate
                 width: listView.width
@@ -277,7 +278,7 @@ ColumnLayout {
             function runCurrentIndex() {
                 var entry = History.history[currentIndex]
                 if (entry) {
-                    queryField.text = entry
+                    queryField.text = entry.queryString;
                     root.activateFocus();
                 }
             }

@@ -22,31 +22,45 @@
 
 #include <QObject>
 #include <QQmlListProperty>
+#include <QAction>
+#include <QAbstractListModel>
+#include "HistoryEntry.hpp"
 
-class History : public QObject {
+class History : public QAbstractListModel {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList history READ getHistory NOTIFY historyChanged);
+    Q_PROPERTY(QQmlListProperty<HistoryEntry> history READ getHistory NOTIFY historyChanged);
 
-    QStringList history;
+    QList<HistoryEntry *> history;
     bool persistent = true;
 public:
     History(QObject* parent = 0);
     ~History();
 
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+
+    bool hasChildren(const QModelIndex&) const Q_DECL_OVERRIDE {
+        return false;
+    }
+
     void setPersistent(bool persistent);
+    void clearHistory();
 
-    QStringList getHistory();
+    QQmlListProperty<HistoryEntry> getHistory();
 
-    Q_INVOKABLE void addToHistory(QString entry);
-    Q_INVOKABLE void removeFromHistory(QString entry);
+    Q_INVOKABLE void addToHistory(QString queryString, QString displayText, QString icon, int resultIndex);
+    Q_INVOKABLE void removeFromHistory(QString displayName);
 
     Q_INVOKABLE void loadHistory();
+
 signals:
     void historyChanged(bool checked = 0);
 
 private:
     void writeHistoryToFile();
+    QJsonArray toJson();
 };
 
 

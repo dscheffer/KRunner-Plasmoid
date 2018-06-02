@@ -6,6 +6,7 @@ set(plasmoidplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/QProcessWrapperImpl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ShortcutHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/History.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/HistoryEntry.cpp
 )
 
 set(plasmoidplugin_DEPS

@@ -21,6 +21,7 @@
 #include "gmock/gmock.h"
 
 #include <QString>
+#include <memory>
 
 #include "History.hpp"
 
@@ -31,44 +32,61 @@ namespace
 
     TEST(HistoryTest, AddToHistoryTest) {
         History history;
+        history.clearHistory();
         history.setPersistent(false);
-        history.addToHistory(QString("abcd"));
+        history.addToHistory(QString("abcd"), QString("efgh"), QString("ijkl"), 1);
 
-        QString result = history.getHistory()[0];
+        QQmlListProperty<HistoryEntry> resultList = history.getHistory();
+        HistoryEntry *result = resultList.at(&resultList, 0);
 
-        EXPECT_EQ(result, QString("abcd"));
+        EXPECT_EQ(result->getQueryString(), QString("abcd"));
+        EXPECT_EQ(result->getDisplayText(), QString("efgh"));
+        EXPECT_EQ(result->getIcon(), QString("ijkl"));
+        EXPECT_EQ(result->getResultIndex(), 1);
     }
 
     TEST(HistoryTest, AddToHistoryTwice) {
         History history;
+        history.clearHistory();
         history.setPersistent(false);
-        history.addToHistory(QString("abcd"));
-        history.addToHistory(QString("efgh"));
-        history.addToHistory(QString("efgh"));
+        history.addToHistory(QString("abcd"), QString("efgh"), QString("ijkl"), 1);
+        history.addToHistory(QString("mnop"), QString("qrst"), QString("uvwx"), 2);
+        history.addToHistory(QString("mnop"), QString("qrst"), QString("uvwx"), 2);
 
-        QString result = history.getHistory()[0];
+        QQmlListProperty<HistoryEntry> resultList = history.getHistory();
+        HistoryEntry *result = resultList.at(&resultList, 0);
 
-        EXPECT_EQ(result, QString("efgh"));
+        EXPECT_EQ(result->getQueryString(), QString("mnop"));
+        EXPECT_EQ(result->getDisplayText(), QString("qrst"));
+        EXPECT_EQ(result->getIcon(), QString("uvwx"));
+        EXPECT_EQ(result->getResultIndex(), 2);
     }
 
     TEST(HistoryTest, RemoveFromHistory) {
         History history;
+        history.clearHistory();
         history.setPersistent(false);
-        history.addToHistory(QString("abcd"));
-        history.addToHistory(QString("efgh"));
-        history.removeFromHistory(QString("abcd"));
+        history.addToHistory(QString("abcd"), QString("efgh"), QString("ijkl"), 1);
+        history.addToHistory(QString("mnop"), QString("qrst"), QString("uvwx"), 2);
+        history.removeFromHistory(QString("qrst"));
 
-        QString result = history.getHistory()[0];
+        QQmlListProperty<HistoryEntry> resultList = history.getHistory();
+        HistoryEntry *result = resultList.at(&resultList, 0);
 
-        EXPECT_EQ(result, QString("efgh"));
+        EXPECT_EQ(result->getQueryString(), QString("abcd"));
+        EXPECT_EQ(result->getDisplayText(), QString("efgh"));
+        EXPECT_EQ(result->getIcon(), QString("ijkl"));
+        EXPECT_EQ(result->getResultIndex(), 1);
     }
 
     TEST(HistoryTest, RemoveFromEmpty) {
         History history;
+        history.clearHistory();
         history.setPersistent(false);
         history.removeFromHistory(QString("abcd"));
 
-        int count = history.getHistory().length();
+        QQmlListProperty<HistoryEntry> resultList = history.getHistory();
+        int count = resultList.count(&resultList);
 
         EXPECT_EQ(count, 0);
     }

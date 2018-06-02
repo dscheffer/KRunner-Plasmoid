@@ -19,27 +19,31 @@
 
 #include <QFile>
 #include <QDataStream>
-#include <QtConcurrent>
+#include <QtConcurrent/QtConcurrent>
 #include "config.hpp"
 #include "History.hpp"
 
 History::History(QObject *parent)
-    : QObject(parent),  history()
+    : QAbstractListModel(parent), history()
 {
     loadHistory();
 }
 
 History::~History()
-{ }
-
-QStringList History::getHistory()
 {
-    return history;
+    clearHistory();
 }
 
-void History::addToHistory(QString entry)
+QQmlListProperty<HistoryEntry> History::getHistory()
 {
-    history.removeAll(entry);
+    return QQmlListProperty<HistoryEntry>(this, history);
+}
+
+void History::addToHistory(QString queryString, QString displayText, QString icon, int resultIndex)
+{
+    removeFromHistory(displayText);
+
+    HistoryEntry* entry = new HistoryEntry(queryString, displayText, icon, resultIndex, this);
     history.push_front(entry);
 
     if (persistent) {
@@ -47,29 +51,28 @@ void History::addToHistory(QString entry)
     }
 }
 
-void History::removeFromHistory(QString entry)
+void History::removeFromHistory(QString displayName)
 {
-    history.removeAll(entry);
+    HistoryEntry* toRemove = nullptr;
+    for (auto entry : history) {
+        if (entry->getDisplayText() == displayName) {
+            toRemove = entry;
+        }
+    }
 
-    if (persistent) {
-        QtConcurrent::run(this, &History::writeHistoryToFile);
+    if (toRemove != nullptr) {
+        history.removeAll(toRemove);
+        delete toRemove;
     }
 }
 
 void History::writeHistoryToFile() {
     QFile file(CONFIG_LOCATION);
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(QIODevice::WriteOnly)) {
         return;
     }
 
-    file.copy(QString(CONFIG_LOCATION) + QString(".backup"));
-
-    QDataStream out(&file);
-    for (QString entry : history) {
-        out << entry;
-    }
-
-    file.close();
+    file.write(QJsonDocument(toJson()).toJson());
 }
 
 void History::setPersistent(bool persistent) {
@@ -79,17 +82,58 @@ void History::setPersistent(bool persistent) {
 void History::loadHistory() {
     QFile file(CONFIG_LOCATION);
 
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(QIODevice::ReadOnly)) {
         return;
     }
 
-    history.clear();
-    QDataStream in(&file);
-    while (!in.atEnd()) {
-        QString entry;
-        in >> entry;
-        history.push_back(entry);
+    QByteArray data = file.readAll();
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+
+    if (doc.isArray()) {
+        clearHistory();
+
+        for (auto entry : doc.array()) {
+            history.push_back(new HistoryEntry(entry.toObject()));
+        }
+    }
+}
+
+QVariant History::data(const QModelIndex &index, int role) const {
+    if (!index.isValid())
+        return QVariant();
+
+    if (index.row() >= history.size())
+        return QVariant();
+
+    auto m = history[index.row()];
+
+    switch(role) {
+        case Qt::DisplayRole:
+            return m->getDisplayText();
+        case Qt::DecorationRole:
+            if (!m->getIcon().isEmpty()) {
+                return m->getIcon();
+            }
+            break;
     }
 
-    file.close();
+    return QVariant();
+}
+
+int History::rowCount(const QModelIndex &parent) const {
+    return history.size();
+}
+
+QJsonArray History::toJson() {
+    QJsonArray json;
+    for (auto entry : history) {
+        json.append(entry->toJson());
+    }
+
+    return json;
+}
+
+void History::clearHistory() {
+    qDeleteAll(history);
+    history.clear();
 }
