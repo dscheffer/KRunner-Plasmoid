@@ -36,7 +36,7 @@ PlasmaCore.Dialog {
     
     mainItem: Item {
         width: childrenRect.width
-        height: childrenRect.height
+        height: childrenRect.height - 5
         RunCommand { 
             id: krunner
             width: units.gridUnit * 28

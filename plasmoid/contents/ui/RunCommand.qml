@@ -161,11 +161,12 @@ ColumnLayout {
     }
 
     PlasmaExtras.ScrollArea {
+        id: resultsArea
         Layout.alignment: Qt.AlignTop
         visible: results.count > 0
         enabled: visible
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.min(Screen.height, results.contentHeight + 5)
+        Layout.preferredHeight: visible ? Math.min(Screen.height, results.contentHeight + 5) : 0
 
         anchors.top: searchRow.bottom
 
@@ -174,7 +175,7 @@ ColumnLayout {
             queryString: root.query
             runner: root.runner
 
-            anchors.topMargin: 5
+            anchors.topMargin: resultsArea.visible ? 5 : 0
 
             Keys.onPressed: {
                 if (event.text != "") {
