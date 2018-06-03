@@ -41,6 +41,10 @@ QQmlListProperty<HistoryEntry> History::getHistory()
 
 void History::addToHistory(QString queryString, QString displayText, QString icon, int resultIndex)
 {
+    if (queryString.trimmed().isEmpty() || displayText.trimmed().isEmpty()) {
+        return;
+    }
+
     removeFromHistory(displayText);
 
     HistoryEntry* entry = new HistoryEntry(queryString, displayText, icon, resultIndex, this);
